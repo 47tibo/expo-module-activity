@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import expo.modules.kotlin.activityresult.AppContextActivityResultContract
 import expo.modules.kotlin.providers.AppContextProvider
 import java.io.Serializable
@@ -15,11 +16,12 @@ enum class DummyParam : Parcelable {
     DUMMY_INPUT,
 }
 
-internal class DummyContract(private val appContextProvider: AppContextProvider,) : AppContextActivityResultContract<DummyContractOptions, DummyContractResult> {
+internal class DummyContract(private val appContextProvider: AppContextProvider) :
+    AppContextActivityResultContract<DummyContractOptions, DummyContractResult> {
     override fun createIntent(context: Context, input: DummyContractOptions): Intent {
         val extras = Bundle()
         extras.putParcelable(
-            "DummyActivitPacelable",
+            "DummyActivityParcelable",
             input.dummyParam
         )
         val intent = Intent(appContextProvider.appContext.reactContext, DummyActivity::class.java)
@@ -28,10 +30,16 @@ internal class DummyContract(private val appContextProvider: AppContextProvider,
         return intent
     }
 
-    override fun parseResult(input: DummyContractOptions, resultCode: Int, intent: Intent?): DummyContractResult =
+    override fun parseResult(
+        input: DummyContractOptions,
+        resultCode: Int,
+        intent: Intent?
+    ): DummyContractResult =
         if (resultCode == Activity.RESULT_CANCELED) {
+            Log.i("DummyContract", "DummyContractResult.Cancelled.")
             DummyContractResult.Cancelled()
         } else {
+            Log.i("DummyContract", "DummyContractResult.Success. resultCode : $resultCode")
             DummyContractResult.Success()
         }
 }
