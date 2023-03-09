@@ -12,14 +12,19 @@ class ExpoSettingsModule : Module() {
     override fun definition() = ModuleDefinition {
         Name("ExpoSettings")
 
-        Function("getTheme") {
-            return@Function "system"
+        Function("startDummyActivity") {
+            startDummyActivity()
         }
 
         RegisterActivityContracts {
             dummyActivityLauncher = registerForActivityResult(
                 DummyContract(this@ExpoSettingsModule),
-            ) { input, result -> Log.i("ExpoSettingsModule", "dummyActivityLauncher result : $result") }
+            ) { input, result ->
+                Log.i(
+                    "ExpoSettingsModule",
+                    "dummyActivityLauncher result : $result"
+                )
+            }
         }
     }
 
